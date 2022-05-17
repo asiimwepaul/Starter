@@ -1,75 +1,50 @@
-import { useState } from "react";
-import { link } from "react-router-dom";
-
+import { useState, useEffect } from "react";
 import axios from "axios";
 
-export function CreateTodo() {
-    const [data, setData] = useState({ title: "", description: "" });
+function TodoCard({ data }) {
+    const { _id, title, description } = data;
+    return(
+        <li key={_id}>
+            <div className="title-description">
+                <h3>{title}</h3>
+                <p>{description}</p>
+            </div>
 
-    function handleChange(e) {
-       setData((data) =>({ ...data, [e.target.name]: e.target.value }));
-    }
+            <div className="button-container">
+                <button className="button">edit</button>
+                <button className="button">delete</button>
+            </div>
+        </li>
+    );
+}
 
-    function handleSubmit(e) {
-        e.preventDefault();
+export function ShowTodoList(){
+    const [todo, setTodo] = useState([]);
 
-        const todo = {
-            title: data.title,
-            description: data.description,
-        };
-
-        console.log({ todo });
+    useEffect(() => {
         axios
-            .post("http://localhost:8000/api/todo", data)
+            .get("http://localhost:8000/api/todo")
             .then((res) => {
-                setData({ title: "", description: "" });
-                console.log(res.data.message);
+                console.log(res.data);
+                setTodo(res.data);
             })
             .catch((err) => {
-                console.log("Error couldn't create TODO");
-                console.log(err.message);
+                console.log(err);
             });
-        
-    }
+    }, []);
 
     return (
         <section className="container">
-            <link to="/" className="button-back">
-                <button type="button" className="button">
-                    back
-                </button>
+            <link to="/create-todo" className="button-new">
+                <button className="button">New</button>
             </link>
             <section className="contents">
-                <form
-                    onSubmit={handleSubmit}
-                    className="form-container"
-                    onValidate
-                >
-                    <label className="label" htmlFor="title">
-                        Title
-                    </label>
-                    <input
-                        className="input"
-                        type="text" 
-                        name="title"
-                        value={data.title}
-                        onChange={handleChange}
-                        />
-                    <label className="label" htmlFor="description">
-                        Description
-                    </label>
-                    <input 
-                        className="input" 
-                        type="text"
-                        name="description"
-                        value={data.description}
-                        onChange={hangleChange}
-
-                        />
-                    <button type="submit" className="button">
-                        create Todo
-                    </button>
-                </form>
+                <h1>TODO</h1>
+                <ul className="list-container">
+                    {todo.map((data) => (
+                        <TodoCard data={data} />
+                    ))}
+                </ul>
             </section>
         </section>
     );
