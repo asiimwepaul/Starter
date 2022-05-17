@@ -9,7 +9,6 @@ function TodoCard({ data }) {
                 <h3>{title}</h3>
                 <p>{description}</p>
             </div>
-
             <div className="button-container">
                 <button className="button">edit</button>
                 <button className="button">delete</button>
