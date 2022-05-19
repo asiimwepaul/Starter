@@ -1,28 +1,12 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { showTodoList } from "./components/showTodoList";
+import "./App.scss";
 
-function TodoCard({ data }) {
-  const {_id, title, description } = data;
+function App() {
   return(
-    <li key={_id}>
-      <div className="title-description">
-        <h3>{title}</h3>
-        <p>{description}</p>
-      </div>
-      <div className="button-container">
-        <button className="button">edit</button>
-        <button className="button">delete</button>
-      </div>
-    </li>
-  )
+    <div className="app-contents">
+      <showTodoList />
+    </div>
+  );
 }
 
-export function ShowTodoList() {
-  const [todo, setTodo] = useState([]);
-  useEffect(() => {
-    axios
-        .get()
-        .then()
-        .catch()
-  }, [])
-}
+export default App;
